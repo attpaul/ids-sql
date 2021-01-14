@@ -44,7 +44,8 @@ REQ = []
 
 """
 token= []
-groupes= []
+groups= []
+templates = []
 
 
 
@@ -142,10 +143,10 @@ def is_token_equal(token1,token2):
     return True
 
 
-def makes_groupes():
+def makes_groups():
     #regroupement des groupes de token identique
     alreadygone = []
-    for i in range(len(REQ)):
+    for i in range(len(REQ)-1):
         if alreadygone.count(i)==0:
             groupecreated = []
             groupecreated.append(i)
@@ -153,9 +154,38 @@ def makes_groupes():
                 if is_token_equal(token[i] , token[j]):
                     groupecreated.append(j)
                     alreadygone.append(j)
-            groupes.append(groupecreated)
+            groups.append(groupecreated)
 
+def find_hole_in_groups():
+    for i in range(len(groups)):
+        if len(groups[i])>1:
+            make_sub_groups_template(groups[i])
+    
 
+def make_sub_groups_template(tab):
+    holes_tested=[]
+    for i in range(len(tab)-1):
+        for j in range(i+1,len(tab)):
+            holes_tested.append(find_hole(token[tab[i]] ,token[tab[j]]))
+    print(holes_tested)
+
+                
+"""                
+    templates_created = []
+    if len(holes_tested)<2 :
+        templates_created.append(holes_tested)
+        templates_created.append(tab[i])
+        templates_created.append(tab[j])
+    templates.append(templates_created)
+"""
+
+#print(find_hole(list(tokenize_one_req("select * FROM table WHERE user = 2")),list(tokenize_one_req("SELECT * FROM table WHERE user = 9"))))
+def find_hole(req1,req2):
+    holes = []
+    for i in range(len(req1)):
+        if req1[i][1] != req2[i][1]:
+            holes.append(i)
+    return holes
 
 
 
@@ -186,11 +216,11 @@ def display_token_dataset():
         print("\n")
         print(token[i])
 
-def display_groupes_dataset():
+def display_groups_dataset():
     #affichage de tout les requetes tranformé en token
     print("\n")
-    for i in range(len(groupes)):
-        print(groupes[i])
+    for i in range(len(groups)):
+        print(groups[i])
 
 ################################################################################################################
 ################################################################################################################
@@ -201,14 +231,24 @@ def display_groupes_dataset():
 
 def main():
 
-   load_json_data("sqlQueries.json",req_from_json)
-   load_in_req()
-   #display_req_dataset()
-   #display_req_dataset_json()
-   tokenize_all_req()
-   #display_token_dataset()
-   makes_groupes()
-   display_groupes_dataset()
+    #print(find_hole(list(tokenize_one_req("select * FROM table WHERE user = 2")),list(tokenize_one_req("SELECT * FROM table WHERE user = 9"))))
+    load_json_data("sqlQueries.json",req_from_json)
+    load_in_req()
+    #display_req_dataset()
+    #display_req_dataset_json()
+    tokenize_all_req()
+    #display_token_dataset()
+    makes_groups()
+    display_groups_dataset()
+    find_hole_in_groups()
+
+    #print(list(tokenize_one_req(REQ[0])))
+    #print(list(tokenize_one_req(REQ[1])))
+    #print(find_hole(list(tokenize_one_req(REQ[0])),list(tokenize_one_req(REQ[1]))))
+    print(REQ[10])
+    print(REQ[11])
+    print(REQ[13])
+    print(REQ[14])
 
 
 

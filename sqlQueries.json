@@ -1,17 +1,27 @@
 {
     "queries" : [
         
-        {
-           "query" : "SELECT acct FROM users WHERE login='log1' AND pin='pw1';",
-           "SQLia" : "false",
-           "numberOfInputs" : 2
-        },
-        {
+         {
+            "query" : "SELECT bcct FROM users WHERE login='log1' AND pin='pw1';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
             "query" : "SELECT acct FROM users WHERE login='log2' AND pin='pw2';",
             "SQLia" : "false",
             "numberOfInputs" : 2
          },
-        {
+         {
+            "query" : "SELECT bcct FROM users WHERE login='log1' AND pin='pw1';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='log2' AND pin='pw2';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
             "query" : "SELECT acct FROM users WHERE login='' or 1=1 -- AND pin=;",
             "SQLia" : "true",
             "numberOfInputs" : 2
@@ -49,6 +59,11 @@
          },
          {
             "query" : "SELECT * from phonebook WHERE username='urs2' AND password='pw2'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='urs3' AND password='pw3'",
             "SQLia" : "false",
             "numberOfInputs" : 2
          },

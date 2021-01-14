@@ -1,0 +1,31 @@
+Enregistrement des données dans un dictionnaire adapté
+
+Enregistrement dans le tableau de token chaque requêtes de notre dictionnaire :
+    une liste de token correspondante a la requête à l'aide du Lexer
+
+Pour chaque liste de token :
+    comparaison avec toutes les autres listes de token
+    Si les types de la liste sont égaux :
+        Regroupement des requêtes dont les listes de types de token sont identiques
+
+Pour chaque groupe (composé de plus de 1 requête) :
+    Pour toutes les requêtes de ce groupe :
+        comparaison des valeurs de token avec toutes les autres requêtes
+        et liste exhaustive des différences entre ces requêtes de même groupe
+
+    Pour cette liste de differences : 
+        création de sous-groupes pouvant définir un template de requêtes type
+
+Pour chaque sous-groupe :
+    Définition des template dans la mémoire utile pour l'algo de production
+
+
+
+
+PSEUDO CODE ALGO V0
+algo d'apprentissage:
+
+
+Téléchargement du data set de query SQL (fichier json)
+
+Enregistrement du fichier json dans un dictionnaire adapté
