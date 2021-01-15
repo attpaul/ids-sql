@@ -92,22 +92,31 @@ def find_hole_in_groups(groups, tokens):
             make_sub_groups_template(groups[i], tokens)
     
 
-def make_sub_groups_template(tab, tokens):
-    holes_tested=[]
-    for i in range(len(tab)-1):
-        for j in range(i+1,len(tab)):
-            holes_tested.append(find_hole(tokens[tab[i]] ,tokens[tab[j]]))
-    print(holes_tested)
+def make_sub_groups_template(group, tokens):
+    tested_holes=[]
+    created_templates = []
+    for i in range(len(group)-1):
+        for j in range(i+1,len(group)):
+            tested_holes.append(find_hole(tokens[group[i]] ,tokens[group[j]]))
+    #print(tested_holes)
 
-                
-"""                
-    templates_created = []
-    if len(holes_tested)<2 :
-        templates_created.append(holes_tested)
-        templates_created.append(tab[i])
-        templates_created.append(tab[j])
-    templates.append(templates_created)
-"""
+    if tested_holes[0]!=[] :
+        if len(tested_holes)<2 :
+            created_templates.append(tested_holes[0])
+        else:
+            hole_liste = []
+            for i in range(len(tested_holes)):
+                for j in range(len(tested_holes[i])):
+                    if(tested_holes[i][j] not in hole_liste):
+                        hole_liste.append(tested_holes[i][j])
+            hole_liste.sort()
+            created_templates.append(hole_liste)
+
+        created_templates.append(tokens[group[0]])
+        templates.append(created_templates)
+        
+           
+
 
 #print(find_hole(list(tokenize_one_req("select * FROM table WHERE user = 2")),list(tokenize_one_req("SELECT * FROM table WHERE user = 9"))))
 def find_hole(req1,req2):
@@ -158,6 +167,12 @@ def display_groups_dataset(groups):
     for i in range(len(groups)):
         print(groups[i])
 
+def display_templates():
+    #affichage de tout les templates (paire liste de positions trous + liste de token)
+    print("\n")
+    for i in range(len(templates)):
+        print(templates[i])
+
 
 #########################
 ######  PROGRAMME  ######
@@ -165,7 +180,7 @@ def display_groups_dataset(groups):
 
 
 def main():
-
+    
     #print(find_hole(list(tokenize_one_req("select * FROM table WHERE user = 2")),list(tokenize_one_req("SELECT * FROM table WHERE user = 9"))))
     req_from_json = load_json_data("sqlQueries.json")
 
@@ -177,6 +192,7 @@ def main():
 
     find_hole_in_groups(groups, tokens)
 
+    display_templates()
     #print(list(tokenize_one_req(REQ[0])))
     #print(list(tokenize_one_req(REQ[1])))
     #print(find_hole(list(tokenize_one_req(REQ[0])),list(tokenize_one_req(REQ[1]))))
