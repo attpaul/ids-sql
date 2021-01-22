@@ -173,6 +173,19 @@ def display_templates():
     for i in range(len(templates)):
         print(templates[i])
 
+def write_learnt_templates2json() :
+    jsonTemplates = []
+    for i in range(len(templates)):
+        template = {}
+        template["holes"] = templates[i][0]
+        tokens = []
+        for singleToken in templates[i][1] :
+            tokens.append([singleToken[0].__str__(),singleToken[1]]) #Conversion des types de token en string pour pouvoir les écrire dans le json
+        template["tokens"] = tokens
+        jsonTemplates.append(template)
+    with open('learntTemplates.json', 'w') as outfile:
+        json.dump(jsonTemplates, outfile)
+
 
 #########################
 ######  PROGRAMME  ######
@@ -189,10 +202,13 @@ def main():
     tokens = tokenize_all_req(REQ)
 
     groups = makes_groups(REQ, tokens)
+    print("groupes : ",groups)
 
     find_hole_in_groups(groups, tokens)
 
     display_templates()
+
+    write_learnt_templates2json()
     #print(list(tokenize_one_req(REQ[0])))
     #print(list(tokenize_one_req(REQ[1])))
     #print(find_hole(list(tokenize_one_req(REQ[0])),list(tokenize_one_req(REQ[1]))))
