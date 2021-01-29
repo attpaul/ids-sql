@@ -1,36 +1,16 @@
-
-# -*-coding:utf-8 -*
-# Hypotheses :
-
-#- les requêtes qu'on voit ne contiennent pas d'attaque
-#- les injections sont composées d’un seul token et c'est toujours le même type de token pour un template (si un template demande un nombre, on ne verra jamais de chaîne de caractère)
-#- il y a entre zéro et deux trous dans une requête. S'il y en a deux, ils sont séparés par au moins un token.
-#- NEW chaque injection n’est pas unique mais le panel d’injection est exhaustif
-
-
-#########################
-######  IMPORT  #########
-#########################
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
 
 import json
 import io
 import copy
 from rich.console import Console
 from Lexer import Lexer
+from collections import defaultdict 
 
 console = Console()
-
-#########################
-######  GLOBALES  #######
-#########################
-
-"""
-    "select * FROM table WHERE user = 2", 
-    "SELECT * FROM table WHERE user = 9", 
-    "SELECT * FROM table3 WHERE id=13", 
-    "SELECT * FROM table WHERE user=2 AND password=truc"]
-
-"""
 
 ########################
 ######  FUNCTION  ######
@@ -50,7 +30,7 @@ def tokenize_all_req(REQ, display=False):
     '''
     tokens = []
     for i in range(len(REQ)):
-        tokens.insert(i,list(tokenize_one_req(REQ[i])))
+        tokens.append(list(tokenize_one_req(REQ[i])))
     if display :
         display_token_dataset(REQ, tokens)
     return tokens
@@ -140,6 +120,19 @@ def load_in_req(req_from_json, display=False):
         display_req_dataset(REQ)
     return REQ
 
+def write_learnt_templates2json(templates) :
+  jsonTemplates = []
+  for i in range(len(templates)):
+      template = {}
+      template["holes"] = templates[i][0]
+      tokens = []
+      for singleToken in templates[i][1] :
+          tokens.append([singleToken[0].__str__(),singleToken[1]]) #Conversion des types de token en string pour pouvoir les écrire dans le json
+      template["tokens"] = tokens
+      jsonTemplates.append(template)
+  with open('data/learntTemplates.json', 'w') as outfile:
+      json.dump(jsonTemplates, outfile)
+
 def display_req_dataset(REQ):
     #Affichage des requetes de test
     for i in range(len(REQ)):
@@ -170,20 +163,6 @@ def display_templates(templates, number=None):
     for i in range(number):
         print(templates[i])
 
-def write_learnt_templates2json(templates) :
-    jsonTemplates = []
-    for i in range(len(templates)):
-        template = {}
-        template["holes"] = templates[i][0]
-        tokens = []
-        for singleToken in templates[i][1] :
-            tokens.append([singleToken[0].__str__(),singleToken[1]]) #Conversion des types de token en string pour pouvoir les écrire dans le json
-        template["tokens"] = tokens
-        jsonTemplates.append(template)
-    with open('learntTemplates.json', 'w') as outfile:
-        json.dump(jsonTemplates, outfile)
-
-
 def display_holes(templates) :
     for i in range(len(templates)) :
         holes, tokens = templates[i]
@@ -196,23 +175,18 @@ def display_holes(templates) :
                 req += '[green]' + string + '[/green]'
         console.print(req, end='\n\n')
 
-def write_tokens(tokens) :
-    f = open("tokens.txt", 'a')
-    r = ''
-    for x in tokens :
-        r += str(x)
-        r += '\n'
-    f.write(r)
-    f.close()
-    return
+def match_group(token, groups, tokens) :
+  #Modifie tokens et groups !
+  tokens.append(token)
+  n = len(tokens)
+  for i in range(len(groups)) : 
+    if is_token_equal(token, tokens[groups[i][0]]) :
+      groups[i].append(n-1)
+      return
+  groups.append([n-1])
+  return
 
-def read_tokens() :
-    f = open("tokens.txt", 'r')
-    tokens = [line[1:-1].split() for line in f.readlines()]
-    # tokens = f.readlines()
-    print(tokens[0])
-    print(tokens[0][0])
-    return
+
 #########################
 ######  PROGRAMME  ######
 #########################
@@ -224,15 +198,13 @@ def main():
 
     REQ = load_in_req(req_from_json)
 
-    tokens = tokenize_all_req(REQ, display=True)
-
-    write_tokens(tokens)
+    tokens = tokenize_all_req(REQ)
 
     groups = make_groups(tokens)
 
     templates = find_hole_in_groups(groups, tokens)
 
-    display_templates(templates)
+    display_holes(templates)
 
     write_learnt_templates2json(templates)
 

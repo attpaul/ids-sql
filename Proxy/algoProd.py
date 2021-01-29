@@ -3,13 +3,14 @@ import json
 import algov0
 
 
-TEMPLATES_LIST = []
+
 newQueriesBuffer = ["SELECT bcct FROM users WHERE login=OR AND pin='pw1';"]
 DEBUG = True 
 
 
 def buildLearntTemplates() :
-    with open('learntTemplates.json') as json_file:
+    TEMPLATES_LIST = []
+    with open('data/learntTemplates.json') as json_file:
         templates = json.load(json_file)
     for e in templates :
         newTemplate = ""
@@ -25,6 +26,7 @@ def buildLearntTemplates() :
         templateDictionary["holes"] = e["holes"]
          
         TEMPLATES_LIST.append(templateDictionary)
+    return TEMPLATES_LIST
 
 
 def templateMatch(query, templatesList) :
@@ -68,12 +70,9 @@ def isQuerySafe(query, template) :
    
 
 def main() :
-    buildLearntTemplates()
+    TEMPLATES_LIST = buildLearntTemplates()
     while (len(newQueriesBuffer) !=0 ) :
         templateMatch(newQueriesBuffer.pop(0), TEMPLATES_LIST)
 
-    
-
-main()
-    
-
+if __name__ == "__main__":
+    main()
