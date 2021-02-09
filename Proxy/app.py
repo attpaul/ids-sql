@@ -87,6 +87,7 @@ def learn() :
     console.print("Regenerating templates...")
     templates = find_hole_in_groups(groups, tokens)
     display_holes(templates)
+    write_learnt_templates2json(templates)
 
   return "success !"
 
@@ -107,7 +108,7 @@ def query() :
     console.print(console.print("\n[bold red]Request doesn't match any template. Request denied.[/bold red]\n"))
 
   else :
-    console.print("\n[bold green]Reuest matched template :[/bold green]\n")
+    console.print("\n[bold green]Request matched template :[/bold green]\n")
     console.print(matchedTemplate)
     isSafe = isQuerySafe(q, matchedTemplate)
     if not isSafe :
