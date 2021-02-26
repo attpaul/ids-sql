@@ -1,0 +1,440 @@
+{
+    "queries" : [
+      
+         {
+            "query" : "SELECT bcct FROM users WHERE login='pr1' AND pin='pin1';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='pr2' AND pin='pin2';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='pr3' AND pin='pin3';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='pr4' AND pin='pin4';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='pr5' AND pin='pin5';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='' or 1=1 -- AND pin=;",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='' UNION SELECT cardNo from CreditCards where accNo=7032 -- AND pin=;",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='doe' AND pin=0; drop table users",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT bcct FROM users WHERE login='' AND pin=convert(int, (select top 1 name from sysobject where xtype'u'))",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT acct FROM users WHERE login='legalUser' AND ASCII(SUBSTRING((SELECT TOP 1 name FROM sysobjects)1,1)) > X WAITFOR 10 -- AND pin=;",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT acct FROM users WHERE login='' AND pin=0; exec{char(0x73687574646f776e)};",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='q1' AND password='z1'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='q2' AND password='z2'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='q3' AND password='z3'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='q4' AND password='z4'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='q5' AND password='z5'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='q6' AND password='z6'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='John' OR 1=1 --password='not-needed'",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * from phonebook WHERE username='admin' OR 1=1 --password='not-needed'",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM accounts WHERE name='admin22' AND password='abc1'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM accounts WHERE name='admin23' AND password='abc2'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM accounts WHERE name='admin24' AND password='abc3'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM accounts WHERE name='admin25' AND password='abc44'",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM accounts WHERE name='admin' AND password='abc' OR 1=1",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT titre, id, langue FROM matable WHERE langue='azrrz' OR langue='dfzfr'",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT titre, id, langue FROM matable WHERE langue='btyrdd' OR langue='bhyrd'",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT titre, id, langue FROM matable WHERE langue='brg' OR langue='bgr'",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT titre, id, langue FROM matable WHERE langue='usrrra' OR langue='russrre'",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT titre, id, langue FROM matable WHERE langue='conrrgo' OR langue='marrrroc'",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT titre, id, langue FROM matable WHERE langue='conrrgo' OR langue='marrrroc'; exec{char(0x73687574646f776e)};",
+            "SQLia" : "true",
+            "numberOfInputs" : 2
+         },         
+         {
+            "query" : "SELECT * FROM POAUNF;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM SCIEBENS;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM EOCOZENO;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM EFOZNEONC;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM NFOZENORR;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM ELEVE, MEMBRE WHERE ELEVE.id_eleve = MEMBRE.id_eleve AND MEMBRE.annee = '1998';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM ELEVE, MEMBRE WHERE ELEVE.id_eleve = MEMBRE.id_eleve AND MEMBRE.annee = '1997';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM ELEVE, MEMBRE WHERE ELEVE.id_eleve = MEMBRE.id_eleve AND MEMBRE.annee = '1996';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM ELEVE, MEMBRE WHERE ELEVE.id_eleve = MEMBRE.id_eleve AND MEMBRE.annee = '1995';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM ELEVE, MEMBRE WHERE ELEVE.id_eleve = MEMBRE.id_eleve AND MEMBRE.annee = '1994';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM ELEVE, MEMBRE WHERE ELEVE.id_eleve = MEMBRE.id_eleve AND MEMBRE.annee = '2010' OR 1=1 ;",
+            "SQLia" : "true",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY expresezfsion_1 ORDER BY expreszqzzzsion_1 LIMIT count OFFSET start",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY expresscvtyyion_2 ORDER BY expressivhnon_2 LIMIT count OFFSET start",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY exprejhssion_3 ORDER BY expressipkoton_3 LIMIT count OFFSET start",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY expressimlkjon_4 ORDER BY expressjklmion_4 LIMIT count OFFSET start",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY expressivbnon_5 ORDER BY expressnnbvion_5 LIMIT count OFFSET start",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY 1expression_1",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY 2expression_2",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY 3expression_3",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY 4expression_4",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM table WHERE condition GROUP BY 5expression_5",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = 31;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = '41';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = '51';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = '61';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = '71';",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = '4' OR 1=1;",
+            "SQLia" : "true",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE PARTICIPE.id_eleve = 108 AND PARTICIPE.id_evt = EVENEMENT.id_evt AND year(EVENEMENT.date_evt) = YEAR(NOW())",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE PARTICIPE.id_eleve = 109 AND PARTICIPE.id_evt = EVENEMENT.id_evt AND year(EVENEMENT.date_evt) = YEAR(NOW())",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE PARTICIPE.id_eleve = 200 AND PARTICIPE.id_evt = EVENEMENT.id_evt AND year(EVENEMENT.date_evt) = YEAR(NOW())",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE PARTICIPE.id_eleve = 201 AND PARTICIPE.id_evt = EVENEMENT.id_evt AND year(EVENEMENT.date_evt) = YEAR(NOW())",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE PARTICIPE.id_eleve = 202 AND PARTICIPE.id_evt = EVENEMENT.id_evt AND year(EVENEMENT.date_evt) = YEAR(NOW())",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE PARTICIPE.id_eleve = convert(int, (select top 1 id from sysobject where xtype'u')) AND PARTICIPE.id_evt = EVENEMENT.id_evt AND year(EVENEMENT.date_evt) = YEAR(NOW())",
+            "SQLia" : "true",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE EVENEMENT.id_evt = PARTICIPE.id_evt AND EVENEMENT.id_evt = 33;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE EVENEMENT.id_evt = PARTICIPE.id_evt AND EVENEMENT.id_evt = 34;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE EVENEMENT.id_evt = PARTICIPE.id_evt AND EVENEMENT.id_evt = 35;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE EVENEMENT.id_evt = PARTICIPE.id_evt AND EVENEMENT.id_evt = 36;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE EVENEMENT.id_evt = PARTICIPE.id_evt AND EVENEMENT.id_evt = 344;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT COUNT(*) FROM EVENEMENT, PARTICIPE WHERE EVENEMENT.id_evt = PARTICIPE.id_evt AND EVENEMENT.id_evt = 349;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "select COUNT(*), nom_eleve FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT WHERE ELEVE.id_eleve = EMPRUNT.id_eleve AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire AND EXEMPLAIRE.id_livre = LIVRE.id_livre AND LIVRE.titre = 'Fascination1' GROUP BY nom_eleve;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "select COUNT(*), nom_eleve FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT WHERE ELEVE.id_eleve = EMPRUNT.id_eleve AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire AND EXEMPLAIRE.id_livre = LIVRE.id_livre AND LIVRE.titre = 'Ahhhhhhhhh1' GROUP BY nom_eleve;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "select COUNT(*), nom_eleve FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT WHERE ELEVE.id_eleve = EMPRUNT.id_eleve AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire AND EXEMPLAIRE.id_livre = LIVRE.id_livre AND LIVRE.titre = 'FascinatdqEDZDion1' GROUP BY nom_eleve;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "select COUNT(*), nom_eleve FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT WHERE ELEVE.id_eleve = EMPRUNT.id_eleve AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire AND EXEMPLAIRE.id_livre = LIVRE.id_livre AND LIVRE.titre = 'Ahiiiehhhhhhhh1' GROUP BY nom_eleve;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "select COUNT(*), nom_eleve FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT WHERE ELEVE.id_eleve = EMPRUNT.id_eleve AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire AND EXEMPLAIRE.id_livre = LIVRE.id_livre AND LIVRE.titre = 'Fascinatqzdion1' GROUP BY nom_eleve;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "select COUNT(*), nom_eleve FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT WHERE ELEVE.id_eleve = EMPRUNT.id_eleve AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire AND EXEMPLAIRE.id_livre = LIVRE.id_livre AND LIVRE.titre = 'Ahhhhefzhhhhh1' GROUP BY nom_eleve;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT date_rendu, nom_eleve  FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT  WHERE ELEVE.id_eleve = EMPRUNT.id_eleve  AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire  AND EXEMPLAIRE.id_livre = LIVRE.id_livre  AND LIVRE.titre = 'aaaaFascinationne1' ORDER BY date_rendu DESC;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT date_rendu, nom_eleve  FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT  WHERE ELEVE.id_eleve = EMPRUNT.id_eleve  AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire  AND EXEMPLAIRE.id_livre = LIVRE.id_livre  AND LIVRE.titre = 'Ehhhhhhhyyhhh1' ORDER BY date_rendu DESC;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT date_rendu, nom_eleve  FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT  WHERE ELEVE.id_eleve = EMPRUNT.id_eleve  AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire  AND EXEMPLAIRE.id_livre = LIVRE.id_livre  AND LIVRE.titre = 'wwwFascinationne1' ORDER BY date_rendu DESC;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT date_rendu, nom_eleve  FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT  WHERE ELEVE.id_eleve = EMPRUNT.id_eleve  AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire  AND EXEMPLAIRE.id_livre = LIVRE.id_livre  AND LIVRE.titre = 'Ehhttthhhhhhhh1' ORDER BY date_rendu DESC;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT date_rendu, nom_eleve  FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT  WHERE ELEVE.id_eleve = EMPRUNT.id_eleve  AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire  AND EXEMPLAIRE.id_livre = LIVRE.id_livre  AND LIVRE.titre = 'qqqFascinationne1' ORDER BY date_rendu DESC;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT date_rendu, nom_eleve  FROM ELEVE, LIVRE, EXEMPLAIRE, EMPRUNT  WHERE ELEVE.id_eleve = EMPRUNT.id_eleve  AND EMPRUNT.id_exemplaire = EXEMPLAIRE.id_exemplaire  AND EXEMPLAIRE.id_livre = LIVRE.id_livre  AND LIVRE.titre = 'Ehhhhhhhhjjhh1' ORDER BY date_rendu DESC;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },    
+         {
+            "query" : "SELECT sum(total.an)/ 17 AS moyenne FROM (SELECT count(*) AS an FROM EMPRUNT WHERE YEAR='1012' GROUP BY MONTH AND DECADE='5') AS total;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT sum(total.an)/ 17 AS moyenne FROM (SELECT count(*) AS an FROM EMPRUNT WHERE YEAR='1017' GROUP BY MONTH AND DECADE='5') AS total;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT sum(total.an)/ 17 AS moyenne FROM (SELECT count(*) AS an FROM EMPRUNT WHERE YEAR='1088' GROUP BY MONTH AND DECADE='5') AS total;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT sum(total.an)/ 17 AS moyenne FROM (SELECT count(*) AS an FROM EMPRUNT WHERE YEAR='1099' GROUP BY MONTH AND DECADE='5') AS total;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "SELECT sum(total.an)/ 17 AS moyenne FROM (SELECT count(*) AS an FROM EMPRUNT WHERE YEAR='1014' GROUP BY MONTH AND DECADE='5') AS total;",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 1
+         },
+         {
+            "query" : "DELIMITER // CREATE TRIGGER 'MULTIPLE_COMMENT' BEFORE INSERT ON 'COMMENTAIRE' FOR EACH ROW BEGIN DECLARE NB_ID INTEGER; IF(NEW.id_evt is not null) THEN SELECT COUNT(*) INTO NB_ID FROM 'COMMENTAIRE' WHERE id_eleve=NEW.id_eleve AND id_evt=NEW.id_evt; END IF; IF(NEW.id_jeu is not null) THEN SELECT COUNT(*) INTO NB_ID FROM 'COMMENTAIRE' WHERE id_eleve=NEW.id_eleve AND id_jeu=NEW.id_jeu; END IF; IF (NB_ID>0) THEN SET NEW.id_eleve = NULL; SET NEW.id_jeu = NULL; SET NEW.id_evt = NULL; END IF; END;  //",
+            "SQLia" : "fasle",
+            "numberOfInputs" : 0
+         }
+    ]
+}
