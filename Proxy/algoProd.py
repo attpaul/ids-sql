@@ -1,6 +1,6 @@
 import re
 import json
-import algov0
+import algoStaging
 
 
 
@@ -47,7 +47,7 @@ def isQuerySafe(query, template) :
         print("Query : ", query)
         print("template : ", template)
 
-    queryTokens = list(algov0.tokenize_one_req(query))
+    queryTokens = list(algoStaging.tokenize_one_req(query))
     queryTokensString =[]
     for singleToken in queryTokens :
         queryTokensString.append([singleToken[0].__str__(), singleToken[1]])

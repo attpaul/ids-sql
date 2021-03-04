@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from rich.console import Console
 from rich.table import Table
 from rich import inspect
+from hashlib import sha1
 
 from algoStaging import load_json_data, load_in_req, tokenize_one_req, tokenize_all_req, make_groups, find_hole_in_groups, display_holes, match_group, write_learnt_templates2json
 from algoProd import templateMatch, buildLearntTemplates, isQuerySafe
@@ -20,6 +21,7 @@ console = Console()
 
 compteur = 0
 seuil = 3
+currentHash = ''
  
 @app.route('/config', methods=["POST"])
 def config() :
@@ -84,6 +86,7 @@ def learn() :
   compteur +=1 
 
   if compteur >= seuil :
+    compteur = 0
     console.print("Regenerating templates...")
     templates = find_hole_in_groups(groups, tokens)
     display_holes(templates)
@@ -93,8 +96,15 @@ def learn() :
 
 @app.route('/query', methods=['POST'])
 def query() :
+  global currentHash
+  global templatesList
 
-  templatesList = buildLearntTemplates()
+  console.print('Comparing hashes...')
+  newHash = hashFile('data/learntTemplates.json')
+  if currentHash != newHash :
+    console.print('Hashes are different, file has been updated, regenerating...')
+    templatesList = buildLearntTemplates()
+    currentHash = newHash
 
   q = request.form['query']
 
@@ -158,6 +168,16 @@ def query() :
     }
  """
 
+def hashFile(fileToHash, BLOCKSIZE=65536) :
+  sha = sha1()
+
+  with open(fileToHash, 'rb') as file :
+    buf = file.read(BLOCKSIZE)
+    while len(buf) > 0 :
+      sha.update(buf)
+      buf = file.read(BLOCKSIZE)
+  
+  return sha.hexdigest()
 
 if __name__ == "__main__":
   app.run(host='localhost', port=8000, debug=True)
