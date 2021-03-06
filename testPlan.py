@@ -1,35 +1,20 @@
 # importing the requests library 
 import requests, json, io, time
+from Algos.algoStaging import load_json_data, load_in_req
+
+from rich.console import Console
+from rich.table import Table
 
 #Parametres :
 debug = True
 
-#import de fonctions de algoStaging
-def load_json_data(filename, display=False):
-    liste_de_req = []
-    with io.open(filename, encoding='utf-8') as read_file:
-        liste_de_req.append(json.load(read_file))
-    if display :
-        display_req_dataset_json(liste_de_req)
-    return liste_de_req
-
-def load_in_req(req_from_json, display=False):
-    REQ = []
-    for i in range(len(req_from_json[0]['queries'])):
-        REQ.append( req_from_json[0]['queries'][i]['query'].encode('utf-8'))
-    if display :
-        display_req_dataset(REQ)
-    return REQ
-
 #récupération du fichier de requête test
 testQueries = load_json_data("sqlQueries.json")[0]["queries"]
 #print(testQueries[0]["query"])
-
+API_ENDPOINT = "http://127.0.0.1:5000/query"
   
-def testProd():
-    responseTimeList = []
-    # defining the api-endpoint  
-    API_ENDPOINT = "http://127.0.0.1:5000/query"
+def testTime():
+    responseTimeList = [] 
 
     tDebutTest = time.time()
     
@@ -68,5 +53,31 @@ def testProd():
     print("Temps de réponse min : %f"%min(responseTimeList))
     print("Requête correspondante :\n %s\n"%testQueries[responseTimeList.index(min(responseTimeList))])
 
+def testAccuracy() :
+    console = Console()
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("A\\R", style="bold")
+    table.add_column("Positive")
+    table.add_column("Negative")
+    results = {
+        "TP" : 0,
+        "TN" : 0,
+        "FP" : 0,
+        "FN" : 0
+    }
+    queries = load_json_data("sqlQueriesProd.json")[0]["queries"]
+    for query in queries :
+        r = requests.post(
+            url = API_ENDPOINT, 
+            data = { "testing" : True, **query }
+        ).json()
+        results[r["result"]] += 1
+    table.add_row("Positive", str(results['TP']), str(results['FP']))
+    table.add_row("Negative", str(results['FN']), str(results['TN']))
+    console.print(table)
+    return results
 
-testProd() 
+
+
+
+testAccuracy() 

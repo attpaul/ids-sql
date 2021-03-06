@@ -1,3 +1,10 @@
+import os
+import sys
+
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
 from flask import Flask,render_template, request
 from flask_mysqldb import MySQL
 from rich.console import Console
@@ -5,8 +12,8 @@ from rich.table import Table
 from rich import inspect
 from hashlib import sha1
 
-from algoStaging import load_json_data, load_in_req, tokenize_one_req, tokenize_all_req, make_groups, find_hole_in_groups, display_holes, match_group, write_learnt_templates2json
-from algoProd import templateMatch, buildLearntTemplates, isQuerySafe
+from Algos.algoStaging import load_json_data, load_in_req, tokenize_one_req, tokenize_all_req, make_groups, find_hole_in_groups, display_holes, match_group, write_learnt_templates2json
+from Algos.algoProd import templateMatch, buildLearntTemplates, isQuerySafe
  
 app = Flask(__name__)
 
@@ -43,7 +50,7 @@ def load() :
   global tokens
   global groups
   global templates
-  req_from_json = load_json_data("../sqlQueries.json")
+  req_from_json = load_json_data("../sqlQueriesLearn.json")
 
   REQ = load_in_req(req_from_json)
 
@@ -105,8 +112,12 @@ def query() :
     console.print('Hashes are different, file has been updated, regenerating...')
     templatesList = buildLearntTemplates()
     currentHash = newHash
+  else : 
+    console.print('hashes identical, continuing...')
 
   q = request.form['query']
+  isInjection = request.form["SQLia"] == "true" or False
+  isTest = request.form["testing"] or False
 
   console.print("\n[bold red]Query :[/bold red]", q, "\n")
 
@@ -127,7 +138,13 @@ def query() :
       console.print("\n[bold green]Request approved.[/bold green]\n")
       executeQuery = True
   
-  if executeQuery :
+  if isTest :
+    return {
+      "isSQLia" : isInjection,
+      "isExecuted" : executeQuery,
+      "result" : ((isInjection and not executeQuery) and "TP") or ((not isInjection and executeQuery) and "TN") or ((isInjection and executeQuery) and "FN") or ((not isInjection and not executeQuery) and "FP")
+    }
+  elif executeQuery :
     return {
       "status" : 200,
       "message" : "success"
