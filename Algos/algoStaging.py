@@ -2,6 +2,8 @@ import os, sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
+#Permet l'import de Lexer
+sys.path.insert(1,parentdir+"/Lexer")
 
 import json
 import io
@@ -81,20 +83,19 @@ def make_sub_groups_template(group, tokens, templates):
             tested_holes.append(find_hole(tokens[group[i]] ,tokens[group[j]]))
     #print(tested_holes)
 
-    if tested_holes[0]!=[] :
-        if len(tested_holes)<2 :
-            created_templates.append(tested_holes[0])
-        else:
-            hole_liste = []
-            for i in range(len(tested_holes)):
-                for j in range(len(tested_holes[i])):
-                    if(tested_holes[i][j] not in hole_liste):
-                        hole_liste.append(tested_holes[i][j])
-            hole_liste.sort()
-            created_templates.append(hole_liste)
-
-        created_templates.append(tokens[group[0]])
-        templates.append(created_templates)
+    #if tested_holes[0]!=[] :  #commente pour permettre la creation de template sans trous
+    if len(tested_holes)<2 :
+        created_templates.append(tested_holes[0])
+    else:
+        hole_liste = []
+        for i in range(len(tested_holes)):
+            for j in range(len(tested_holes[i])):
+                if(tested_holes[i][j] not in hole_liste):
+                    hole_liste.append(tested_holes[i][j])
+        hole_liste.sort()
+        created_templates.append(hole_liste)
+    created_templates.append(tokens[group[0]])
+    templates.append(created_templates)
         
 #print(find_hole(list(tokenize_one_req("select * FROM table WHERE user = 2")),list(tokenize_one_req("SELECT * FROM table WHERE user = 9"))))
 def find_hole(req1,req2):
@@ -194,7 +195,7 @@ def match_group(token, groups, tokens) :
 
 def main():
     
-    req_from_json = load_json_data("sqlQueries.json")
+    req_from_json = load_json_data("../sqlQueriesLearn.json")
 
     REQ = load_in_req(req_from_json)
 

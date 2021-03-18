@@ -47,7 +47,7 @@ def isQuerySafe(query, template) :
         print("Query : ", query)
         print("template : ", template)
 
-    queryTokens = list(algoStaging.tokenize_one_req(query))
+    queryTokens = list(Algos.algoStaging.tokenize_one_req(query))
     queryTokensString =[]
     for singleToken in queryTokens :
         queryTokensString.append([singleToken[0].__str__(), singleToken[1]])
