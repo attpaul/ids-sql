@@ -1,6 +1,8 @@
 import os
 import sys
 import mysql.connector
+import time
+from math import floor
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
@@ -18,8 +20,7 @@ from Algos.algoProd import templateMatch, buildLearntTemplates, isQuerySafe
 app = Flask(__name__)
 
 console = Console()
-idsRunning = False
-console.print("* * * \n[bold green]IDS running : %s [/bold green]\n* * *"%idsRunning)
+debug = False
 
 compteur = 0
 seuil = 3
@@ -124,14 +125,21 @@ def register():
 def login():
   if request.method == "POST":
       details = request.form
-      userName = details['fname'] 
+      userName = details['fname']
       userPassword = details['lname']
+      if 'use-ids' in details :
+        useIds = True
+      else :
+        useIds = False
       query = "SELECT * FROM users WHERE user_name='%s' AND user_password='%s';" %(userName,userPassword)
-      serverResponse = executeQueries(query)
+      startTime = time.time()
+      serverResponse = executeQueries(query, idsRunning=useIds)
+      totalTime = time.time() - startTime
       if serverResponse == False :
         return render_template("SQLiaDetected.html", invalidQuery = query)
-      print("DB response :\n%s" %(serverResponse or "No matching user in DB"))
-      return render_template('loginResponse.html', tupleResults = serverResponse)
+      if debug :
+        print("DB response :\n%s" %(serverResponse or "No matching user in DB"))
+      return render_template('loginResponse.html', tupleResults = serverResponse, time=floor(totalTime*1000))
   return render_template('login.html')
 
 @app.route('/user')
@@ -142,7 +150,8 @@ def userProfile() :
   serverResponse = executeQueries(query)
   if serverResponse == False :
     return render_template("SQLiaDetected.html", invalidQuery = query)
-  print("DB response :\n%s" %(serverResponse or "No matching user in DB"))
+  if debug : 
+    print("DB response :\n%s" %(serverResponse or "No matching user in DB"))
   return render_template('loginResponse.html', tupleResults = serverResponse)
   
 
@@ -150,28 +159,32 @@ def verifyQuery(query) :
   global currentHash
   global templatesList
 
-  console.print('Comparing hashes...')
+  if debug : 
+    console.print('Comparing hashes...')
   newHash = hashFile('data/learntTemplates.json')
   if currentHash != newHash :
-    console.print('Hashes are different, file has been updated, regenerating...')
+    if debug :
+      console.print('Hashes are different, file has been updated, regenerating...')
     templatesList = buildLearntTemplates()
     currentHash = newHash
   else : 
-    console.print('hashes identical, continuing...')
+    if debug :
+      console.print('hashes identical, continuing...')
 
   console.print("\n[bold red]Query :[/bold red]", query, "\n")
 
   executeQuery = False
 
-  matchedTemplate = templateMatch(query, templatesList)
+  matchedTemplate = templateMatch(query, templatesList, debug=debug)
 
   if not matchedTemplate :
     console.print(console.print("\n[bold red]Request doesn't match any template. Request denied.[/bold red]\n"))
 
   else :
-    console.print("\n[bold green]Request matched template :[/bold green]\n")
-    console.print(matchedTemplate)
-    isSafe = isQuerySafe(query, matchedTemplate)
+    if debug :
+      console.print("\n[bold green]Request matched template :[/bold green]\n")
+      console.print(matchedTemplate)
+    isSafe = isQuerySafe(query, matchedTemplate, debug=debug)
     if not isSafe :
       console.print("\n[bold red]Request has been detected as unsafe. Request denied.[/bold red]\n")
     else :
@@ -191,11 +204,10 @@ def hashFile(fileToHash, BLOCKSIZE=65536) :
   
   return sha.hexdigest()
 
-def executeQueries(query) :
-  global idsRunning
+def executeQueries(query, idsRunning=True) :
   config = {
         'user': 'root',
-        'password': 'root',
+        'password': '',
         'host': '127.0.0.1',
         'database': 'ids_test',
         'raise_on_warnings': True
@@ -207,7 +219,8 @@ def executeQueries(query) :
   results = []
   cnx = mysql.connector.connect(**config)
   cursor = cnx.cursor()
-  print("\nStatement : "+query)
+  if debug :
+    print("\nStatement : "+query)
   for result in cursor.execute(query, multi=True) :
     results.append(cursor.fetchall())
   cnx.commit()
