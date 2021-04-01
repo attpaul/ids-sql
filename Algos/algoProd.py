@@ -5,8 +5,6 @@ import Algos.algoStaging
 
 
 newQueriesBuffer = ["SELECT bcct FROM users WHERE login=OR AND pin='pw1';"]
-DEBUG = True 
-
 
 def buildLearntTemplates() :
     TEMPLATES_LIST = []
@@ -29,38 +27,40 @@ def buildLearntTemplates() :
     return TEMPLATES_LIST
 
 
-def templateMatch(query, templatesList) :
+def templateMatch(query, templatesList, debug=False) :
     for k in range(len(templatesList)):
         #print(k, " template", templatesList[k]["template"])
         m = re.compile(templatesList[k]["template"])
         match = m.match(query)
         if (match and isQuerySafe(query,templatesList[k])) :
-            print("Un template correspondant à cette requête a été trouvé : ", templatesList[k])
+            if debug :
+                print("Un template correspondant à cette requête a été trouvé : ", templatesList[k])
             return templatesList[k]
-    print("Impossible de trouver un template appris correspondant à cette requête")
+    if debug : 
+        print("Impossible de trouver un template appris correspondant à cette requête")
     return False
             
 
-def isQuerySafe(query, template) :
-    if DEBUG : 
+def isQuerySafe(query, template, debug=False) :
+    if debug : 
         print("Vérification sur les injections SQL :")
         print("Query : ", query)
         print("template : ", template)
 
-    queryTokens = list(algoStaging.tokenize_one_req(query))
+    queryTokens = list(Algos.algoStaging.tokenize_one_req(query))
     queryTokensString =[]
     for singleToken in queryTokens :
         queryTokensString.append([singleToken[0].__str__(), singleToken[1]])
     
     # 1er vérification sur la taille de la liste de tokens
     if(len(queryTokensString)!=len(template["tokens"])) :
-        if DEBUG : print("Comparaison des taille de liste de token : les tailles ne correspondent pas")
+        if debug : print("Comparaison des taille de liste de token : les tailles ne correspondent pas")
         return False
     # 2nd vérification sur les type de tokens
     else :
         for k in range(len(queryTokensString)) :
             if (queryTokensString[k][0] != template["tokens"][k][0]) : #idée d'amélioration pour éviter comparaison de string : hash table sur les tables du lexer
-                if DEBUG : 
+                if debug : 
                     print("Comparaison des types de token : les types de token ne correspondent pas")
                     print("Type de token attendu : ", template["tokens"][k][0])
                     print("Type de token trouvé : ", queryTokensString[k][0])

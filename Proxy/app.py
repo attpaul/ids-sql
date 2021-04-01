@@ -1,12 +1,14 @@
 import os
 import sys
+import mysql.connector
+import time
+from math import floor
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 from flask import Flask,render_template, request
-from flask_mysqldb import MySQL
 from rich.console import Console
 from rich.table import Table
 from rich import inspect
@@ -17,34 +19,13 @@ from Algos.algoProd import templateMatch, buildLearntTemplates, isQuerySafe
  
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'SQL_POC'
-
-mysql = MySQL(app)
-
 console = Console()
+debug = False
 
 compteur = 0
 seuil = 3
 currentHash = ''
  
-@app.route('/config', methods=["POST"])
-def config() :
-  global mysql
-
-  print(request.form)
-
-  app.config['MYSQL_HOST'] = request.form['host']
-  app.config['MYSQL_USER'] = request.form['user']
-  app.config['MYSQL_PASSWORD'] = request.form['password']
-  app.config['MYSQL_DB'] = request.form['db']
- 
-  mysql = MySQL(app)
-
-  return 'ok'
-
 @app.route('/load', methods=["GET"])
 def load() :
   global tokens
@@ -103,40 +84,13 @@ def learn() :
 
 @app.route('/query', methods=['POST'])
 def query() :
-  global currentHash
-  global templatesList
-
-  console.print('Comparing hashes...')
-  newHash = hashFile('data/learntTemplates.json')
-  if currentHash != newHash :
-    console.print('Hashes are different, file has been updated, regenerating...')
-    templatesList = buildLearntTemplates()
-    currentHash = newHash
-  else : 
-    console.print('hashes identical, continuing...')
-
   q = request.form['query']
-  isInjection = request.form["SQLia"] == "true" or False
-  isTest = request.form["testing"] or False
-
+  isInjection = request.form.get("SQLia") == "true" or False
+  isTest = request.form.get("testing") or False
+  
   console.print("\n[bold red]Query :[/bold red]", q, "\n")
 
-  executeQuery = False
-
-  matchedTemplate = templateMatch(q, templatesList)
-
-  if not matchedTemplate :
-    console.print(console.print("\n[bold red]Request doesn't match any template. Request denied.[/bold red]\n"))
-
-  else :
-    console.print("\n[bold green]Request matched template :[/bold green]\n")
-    console.print(matchedTemplate)
-    isSafe = isQuerySafe(q, matchedTemplate)
-    if not isSafe :
-      console.print("\n[bold red]Request has been detected as unsafe. Request denied.[/bold red]\n")
-    else :
-      console.print("\n[bold green]Request approved.[/bold green]\n")
-      executeQuery = True
+  executeQuery = verifyQuery(q)
   
   if isTest :
     return {
@@ -154,36 +108,90 @@ def query() :
       "status" : 403,
       "message" : "Unauthorized request"
     }
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+  if request.method == "POST":
+      details = request.form
+      userName = details['fname']
+      userPassword = details['lname']
+      query = "INSERT INTO users (user_name, user_password) VALUES ('%s', '%s')" %(userName, userPassword)
+      executeQueries(query)
+      return 'success'
+  return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  if request.method == "POST":
+      details = request.form
+      userName = details['fname']
+      userPassword = details['lname']
+      if 'use-ids' in details :
+        useIds = True
+      else :
+        useIds = False
+      query = "SELECT * FROM users WHERE user_name='%s' AND user_password='%s';" %(userName,userPassword)
+      startTime = time.time()
+      serverResponse = executeQueries(query, idsRunning=useIds)
+      totalTime = time.time() - startTime
+      if serverResponse == False :
+        return render_template("SQLiaDetected.html", invalidQuery = query)
+      if debug :
+        print("DB response :\n%s" %(serverResponse or "No matching user in DB"))
+      return render_template('loginResponse.html', tupleResults = serverResponse, time=floor(totalTime*1000))
+  return render_template('login.html')
+
+@app.route('/user')
+def userProfile() :   
+  username = request.args.get('id')
+  password = request.args.get('pwd')
+  query = "SELECT * FROM users WHERE user_name='%s' AND user_password='%s';" %(username,password)
+  serverResponse = executeQueries(query)
+  if serverResponse == False :
+    return render_template("SQLiaDetected.html", invalidQuery = query)
+  if debug : 
+    print("DB response :\n%s" %(serverResponse or "No matching user in DB"))
+  return render_template('loginResponse.html', tupleResults = serverResponse)
   
-  """ if executeQuery :
 
-    cursor = mysql.connection.cursor()
-    cursor.execute(q)
-    mysql.connection.commit()
-    result = cursor.fetchall()
-    cursor.close()
+def verifyQuery(query) :
+  global currentHash
+  global templatesList
 
-    table = Table(title=('Results : {}'.format(cursor.rowcount)))
+  if debug : 
+    console.print('Comparing hashes...')
+  newHash = hashFile('data/learntTemplates.json')
+  if currentHash != newHash :
+    if debug :
+      console.print('Hashes are different, file has been updated, regenerating...')
+    templatesList = buildLearntTemplates()
+    currentHash = newHash
+  else : 
+    if debug :
+      console.print('hashes identical, continuing...')
 
-    columns = []
+  console.print("\n[bold red]Query :[/bold red]", query, "\n")
 
-    for _, (x, *_) in enumerate(cursor.description) :
-      table.add_column(x)
-      columns.append(x)
+  executeQuery = False
 
-    for _, (x,y) in enumerate(result) :
-      table.add_row(x,y)
+  matchedTemplate = templateMatch(query, templatesList, debug=debug)
 
-    console.print(table)
+  if not matchedTemplate :
+    console.print(console.print("\n[bold red]Request doesn't match any template. Request denied.[/bold red]\n"))
 
-    console.print(result)
+  else :
+    if debug :
+      console.print("\n[bold green]Request matched template :[/bold green]\n")
+      console.print(matchedTemplate)
+    isSafe = isQuerySafe(query, matchedTemplate, debug=debug)
+    if not isSafe :
+      console.print("\n[bold red]Request has been detected as unsafe. Request denied.[/bold red]\n")
+    else :
+      console.print("\n[bold green]Request approved.[/bold green]\n")
+      executeQuery = True
 
-    return {
-      "status": 200, 
-      "columns" : columns,
-      "result": list(result)
-    }
- """
+  return executeQuery
 
 def hashFile(fileToHash, BLOCKSIZE=65536) :
   sha = sha1()
@@ -196,5 +204,33 @@ def hashFile(fileToHash, BLOCKSIZE=65536) :
   
   return sha.hexdigest()
 
+def executeQueries(query, idsRunning=True) :
+  config = {
+        'user': 'root',
+        'password': '',
+        'host': '127.0.0.1',
+        'database': 'ids_test',
+        'raise_on_warnings': True
+        }
+  
+  if idsRunning and not verifyQuery(query) :
+    return False
+
+  results = []
+  cnx = mysql.connector.connect(**config)
+  cursor = cnx.cursor()
+  if debug :
+    print("\nStatement : "+query)
+  for result in cursor.execute(query, multi=True) :
+    results.append(cursor.fetchall())
+  cnx.commit()
+  cursor.close()
+  cnx.close()
+  return results
+
+
+
 if __name__ == "__main__":
-  app.run(host='localhost', port=8000, debug=True)
+  app.run(host='localhost', port=5000, debug=True)
+
+

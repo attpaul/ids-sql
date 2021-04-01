@@ -207,7 +207,7 @@
             "numberOfInputs" : 1
          },
          {
-            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = 3;",
+            "query" : "SELECT * FROM JEU, EVENEMENT, UTILISE WHERE JEU.id_jeu = UTILISE.id_jeu AND UTILISE.id_evt = EVENEMENT.id_evt AND EVENEMENT.id_evt = '3';",
             "SQLia" : "false",
             "numberOfInputs" : 1
          },
@@ -742,27 +742,27 @@
             "numberOfInputs" : 1
          },
          {
-            "query" : "DELETE FROM kelas WHERE id = ’4’",
+            "query" : "DELETE FROM kelas WHERE id = '4'",
             "SQLia" : "false",
             "numberOfInputs" : 1
          },
          {
-            "query" : "DELETE FROM kelas WHERE id = ’43",
+            "query" : "DELETE FROM kelas WHERE id = '43'",
             "SQLia" : "false",
             "numberOfInputs" : 1
          },
          {
-            "query" : "DELETE FROM kelas WHERE id = ’5’",
+            "query" : "DELETE FROM kelas WHERE id = '5'",
             "SQLia" : "false",
             "numberOfInputs" : 1
          },
          {
-            "query" : "DELETE FROM kelas WHERE id = ’8’",
+            "query" : "DELETE FROM kelas WHERE id = '8'",
             "SQLia" : "false",
             "numberOfInputs" : 1
          },
          {
-            "query" : "DELETE FROM kelas WHERE id = ’49’",
+            "query" : "DELETE FROM kelas WHERE id = '49'",
             "SQLia" : "false",
             "numberOfInputs" : 1
          },
@@ -817,9 +817,14 @@
             "numberOfInputs" : 2
          },
          {
-            "query" : "DELIMITER // CREATE TRIGGER 'MULTIPLE_COMMENT' BEFORE INSERT ON 'COMMENTAIRE' FOR EACH ROW BEGIN DECLARE NB_ID INTEGER; IF(NEW.id_evt is not null) THEN SELECT COUNT(*) INTO NB_ID FROM 'COMMENTAIRE' WHERE id_eleve=NEW.id_eleve AND id_evt=NEW.id_evt; END IF; IF(NEW.id_jeu is not null) THEN SELECT COUNT(*) INTO NB_ID FROM 'COMMENTAIRE' WHERE id_eleve=NEW.id_eleve AND id_jeu=NEW.id_jeu; END IF; IF (NB_ID>0) THEN SET NEW.id_eleve = NULL; SET NEW.id_jeu = NULL; SET NEW.id_evt = NULL; END IF; END;  //",
+            "query" : "SELECT * FROM users WHERE user_name='Paul' AND user_password='123456';",
             "SQLia" : "false",
-            "numberOfInputs" : 0
+            "numberOfInputs" : 2
+         },
+         {
+            "query" : "SELECT * FROM users WHERE user_name='Pierre' AND user_password='nouveauMotDePasse';",
+            "SQLia" : "false",
+            "numberOfInputs" : 2
          }
 
     ]

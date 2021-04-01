@@ -1,0 +1,20 @@
+<html>
+  <body bgcolor="#8fbc8f">
+    <h1>User logged :</h1>
+    <dl>
+      {% for k in range(tupleResults|length)%}
+      <dt>{{tupleResults[k]}}</dt>
+      {%endfor%}
+    </dl>
+    <br/>
+    <div class="time">
+      <p style="text-align: center;"> Time : {{time}}ms</p>
+    </div>
+    <footer>
+      <center>
+        <a href="{{url_for('login')}}">Sign in again</a>
+        <a href="{{url_for('register')}}">Register</a>
+      </center>
+    </footer>
+  </body>
+</html>

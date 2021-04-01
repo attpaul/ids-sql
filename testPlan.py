@@ -72,6 +72,8 @@ def testAccuracy() :
             data = { "testing" : True, **query }
         ).json()
         results[r["result"]] += 1
+        if r["result"]=="FP" :
+            print("\nFP query : ",query)
     table.add_row("Positive", str(results['TP']), str(results['FP']))
     table.add_row("Negative", str(results['FN']), str(results['TN']))
     console.print(table)
@@ -80,4 +82,5 @@ def testAccuracy() :
 
 
 
-testAccuracy() 
+#testAccuracy() 
+testTime()
