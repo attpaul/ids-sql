@@ -131,7 +131,7 @@ def write_learnt_templates2json(templates) :
           tokens.append([singleToken[0].__str__(),singleToken[1]]) #Conversion des types de token en string pour pouvoir les écrire dans le json
       template["tokens"] = tokens
       jsonTemplates.append(template)
-  with open('data/learntTemplates.json', 'w') as outfile:
+  with open('data/learntTemplates.json', 'w+') as outfile:
       json.dump(jsonTemplates, outfile)
 
 def display_req_dataset(REQ):
