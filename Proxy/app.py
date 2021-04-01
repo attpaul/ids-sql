@@ -22,7 +22,7 @@ try :
   debug = False
   for opt,value in opts :
     if opt == '--debug' :
-      debug = bool(value)
+      debug = True if value == "True" or value == 'true' else False
 except getopt.GetoptError :
   print('Usage : python3 app.py [--debug=...]')
   sys.exit(2)
@@ -189,9 +189,9 @@ def verifyQuery(query) :
 
   executeQuery = False
 
-  matchedTemplate, isQuerySafe = templateMatch(query, templatesList, debug=debug)
+  isTemplateMatch, isQuerySafe, matchedTemplate = templateMatch(query, templatesList, debug=debug)
 
-  if not matchedTemplate :
+  if not isTemplateMatch :
     console.print(console.print("\n[bold red]Request doesn't match any template. Request denied.[/bold red]\n"))
 
   elif not isQuerySafe :
