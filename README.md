@@ -11,10 +11,10 @@ Realise sous l'encadrement de Pierre-Francois GIMENEZ
 ## Installation
 
 Ce projet necessite python 3.
-Apres avoir clone le repo, executez : 
+Apres avoir clone le repo, installez les dependencies : 
 
 ```
-pip3 install sqlparse, flask, rich
+pip3 install -r requirements.txt
 ```
 
 Puis, pour lancer le serveur : 
