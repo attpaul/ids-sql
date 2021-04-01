@@ -27,7 +27,7 @@ def buildLearntTemplates() :
     return TEMPLATES_LIST
 
 
-# Cette fonction retourne un template (isTemplateMatch, isQuerySafe).
+# Cette fonction retourne un tuple (isTemplateMatch, isQuerySafe, templateMatched).
 # isTemplateMatch est True si la requete match au moins un template. 
 # isQuerySafe vaut True si la requete est identifiee comme legitime.
 def templateMatch(query, templatesList, debug=False) :
@@ -41,8 +41,8 @@ def templateMatch(query, templatesList, debug=False) :
             if debug :
                 print("Un template correspondant à cette requête a été trouvé : ", templatesList[k])
             if isQuerySafe(query,templatesList[k]) :
-                return (isTemplateMatch, templatesList[k])
-    return (isTemplateMatch, False)
+                return (True, True, templatesList[k])
+    return (isTemplateMatch, False, None)
             
 
 def isQuerySafe(query, template, debug=False) :
