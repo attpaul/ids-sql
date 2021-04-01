@@ -1,5 +1,5 @@
 import os
-import sys
+import sys, getopt
 import mysql.connector
 import time
 from math import floor
@@ -16,11 +16,23 @@ from hashlib import sha1
 
 from Algos.algoStaging import load_json_data, load_in_req, tokenize_one_req, tokenize_all_req, make_groups, find_hole_in_groups, display_holes, match_group, write_learnt_templates2json
 from Algos.algoProd import templateMatch, buildLearntTemplates, isQuerySafe
+
+try : 
+  opts, _ = getopt.getopt(sys.argv[1:], '', ['debug='])
+  debug = False
+  for opt,value in opts :
+    if opt == '--debug' :
+      debug = True if value == "True" or value == 'true' else False
+except getopt.GetoptError :
+  print('Usage : python3 app.py [--debug=...]')
+  sys.exit(2)
  
 app = Flask(__name__)
 
 console = Console()
-debug = False
+
+if debug : 
+  console.print("[bold yellow]Debug Mode active.[/bold yellow]")
 
 compteur = 0
 seuil = 3
@@ -39,13 +51,17 @@ def load() :
 
   groups = make_groups(tokens)
 
-  console.print(groups)
+  if debug :
+    console.print(groups)
 
   templates = find_hole_in_groups(groups, tokens)
   
-  display_holes(templates)
+  if debug :
+    display_holes(templates)
 
   write_learnt_templates2json(templates)
+
+  console.print('[bold yellow] Loading successful. [/bold yellow]')
 
   return 'successfully loaded'
 
@@ -88,7 +104,7 @@ def query() :
   isInjection = request.form.get("SQLia") == "true" or False
   isTest = request.form.get("testing") or False
   
-  console.print("\n[bold red]Query :[/bold red]", q, "\n")
+  console.print("\n[bold red]Query :[/bold red]", q)
 
   executeQuery = verifyQuery(q)
   
@@ -171,25 +187,22 @@ def verifyQuery(query) :
     if debug :
       console.print('hashes identical, continuing...')
 
-  console.print("\n[bold red]Query :[/bold red]", query, "\n")
-
   executeQuery = False
 
-  matchedTemplate = templateMatch(query, templatesList, debug=debug)
+  isTemplateMatch, isQuerySafe, matchedTemplate = templateMatch(query, templatesList, debug=debug)
 
-  if not matchedTemplate :
+  if not isTemplateMatch :
     console.print(console.print("\n[bold red]Request doesn't match any template. Request denied.[/bold red]\n"))
+
+  elif not isQuerySafe :
+    console.print("\n[bold red]Request has been detected as unsafe. Request denied.[/bold red]\n")
 
   else :
     if debug :
       console.print("\n[bold green]Request matched template :[/bold green]\n")
       console.print(matchedTemplate)
-    isSafe = isQuerySafe(query, matchedTemplate, debug=debug)
-    if not isSafe :
-      console.print("\n[bold red]Request has been detected as unsafe. Request denied.[/bold red]\n")
-    else :
-      console.print("\n[bold green]Request approved.[/bold green]\n")
-      executeQuery = True
+    console.print("\n[bold green]Request approved.[/bold green]\n")
+    executeQuery = True
 
   return executeQuery
 
