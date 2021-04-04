@@ -2,8 +2,23 @@
   <head>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   </head>
-  <body class="w-full h-2/3 flex items-center mx-auto bg-blue-100">
-      <div class="w-full max-w-xs mx-auto">
+  <body class="w-full h-2/3 flex flex-col items-center mx-auto bg-blue-100">
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="w-2/3 bg-red-500 border rounded py-2 px-9 mt-9 mb-9 text-white text-center">
+            <ul>
+              {% for message in messages %}
+                <li>
+                  {{ message }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endwith %}
+      
+      <div class="w-full max-w-xs mx-auto my-auto">
         <form action="" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="fname">
