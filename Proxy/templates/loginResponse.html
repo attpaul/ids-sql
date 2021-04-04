@@ -1,20 +1,32 @@
 <html>
-  <body bgcolor="#8fbc8f">
-    <h1>User logged :</h1>
-    <dl>
-      {% for k in range(tupleResults|length)%}
-      <dt>{{tupleResults[k]}}</dt>
-      {%endfor%}
-    </dl>
-    <br/>
-    <div class="time">
-      <p style="text-align: center;"> Time : {{time}}ms</p>
-    </div>
-    <footer>
-      <center>
-        <a href="{{url_for('login')}}">Sign in again</a>
-        <a href="{{url_for('register')}}">Register</a>
-      </center>
-    </footer>
+  <head>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body class="w-full h-2/3 flex items-center mx-auto bg-blue-100">
+      <div class="w-full max-w-xs mx-auto">
+        <table class="table block w-full bg-green-500 rounded">
+          <tr class="table-row">
+            <th class='table-cell'>Id</th>
+            <th class='table-cell'>Login</th>
+            <th class='table-cell'>Password</th>
+          </tr>
+          {% for k in range(tupleResults|length)%}
+            <tr class="table-row">
+              {% for i in tupleResults[k] %}
+                <td class="table-cell text-center">{{i}}</td>
+              {% endfor %}
+            </tr>
+          {%endfor%}
+          </table>
+        <div class="text-gray-700 text-center w-full my-5">
+          Time : {{time}}ms
+        </div>
+        <div class="flex flex-row align-center justify-evenly">
+          <a href="{{url_for('login')}}" class="text-gray-400 italic hover:underline">Sign in again</a>
+          <a href="{{url_for('register')}}" class="text-gray-400 hover:underline italic hover:font-bold">Register</a>
+        </div>
+      </div>
+
   </body>
+
 </html>

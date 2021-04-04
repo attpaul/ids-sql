@@ -1,23 +1,40 @@
 <html>
-  <body bgcolor="#008b8b">
-    <form method="POST" action="">
-      <center>
-        <h1>Sign in :Enter your details</h1>
-        <br />
-        User name <input type="text" name="fname" /> <br />
-        Password <input type="text" name="lname" /> <br />
-        <br/>
-        <label for="use=ids">Use IDS ?</label>
-        <input id="use-ids" type="checkbox" name="use-ids"/>
-        <br/>
-        <input type="submit" />
-      </center>
-    </form>
-    <footer>
-      <center>
-        <a href="{{url_for('login')}}">Sign in again</a>
-        <a href="{{url_for('register')}}">Register</a>
-      </center>
-    </footer>
+  <head>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body class="w-full h-2/3 flex items-center mx-auto bg-blue-100">
+      <div class="w-full max-w-xs mx-auto">
+        <form action="" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="fname">
+              Username
+            </label>
+            <input type="text" name="fname" placeholder="Username" id="fname" class="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"/> <br />
+          </div>          
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="lname">
+              Password
+            </label>
+            <input type="password" name="lname" placeholder="Password" id="lname" class="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"/> <br />
+          </div>
+          <div class="flex items-center justify-evenly">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 rounded py-2 px-3 text-white font-bold shadow-inner" >
+              Sign In
+            </button>
+            <div class="shadow border border-gray-200 appearance-none rounded py-2 px-3 hover:shadow-inner">
+              <input id="use-ids" name="use-ids" type="checkbox" class="mr-2 leading-tight"/>
+              <label for="use-ids" class="text-gray-500 tet-sm">
+                Use IDS ?
+              </label>
+            </div>
+          </div>
+        </form>
+        <div class="flex flex-row align-center justify-evenly">
+          <a href="{{url_for('login')}}" class="text-gray-400 italic hover:underline">Sign in again</a>
+          <a href="{{url_for('register')}}" class="text-gray-400 hover:underline italic hover:font-bold">Register</a>
+        </div>
+      </div>
+
   </body>
+
 </html>
