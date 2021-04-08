@@ -8,7 +8,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-from flask import Flask,render_template, request
+from flask import Flask,render_template, request, flash, redirect
 from rich.console import Console
 from rich.table import Table
 from rich import inspect
@@ -28,6 +28,7 @@ except getopt.GetoptError :
   sys.exit(2)
  
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'qvhGvuh7bhj@nij'
 
 console = Console()
 
@@ -103,9 +104,7 @@ def query() :
   q = request.form['query']
   isInjection = request.form.get("SQLia") == "true" or False
   isTest = request.form.get("testing") or False
-  
-  console.print("\n[bold red]Query :[/bold red]", q)
-
+ 
   executeQuery = verifyQuery(q)
   
   if isTest :
@@ -129,12 +128,16 @@ def query() :
 @app.route('/register', methods=['GET', 'POST'])
 def register():
   if request.method == "POST":
-      details = request.form
-      userName = details['fname']
-      userPassword = details['lname']
-      query = "INSERT INTO users (user_name, user_password) VALUES ('%s', '%s')" %(userName, userPassword)
-      executeQueries(query)
-      return 'success'
+    print(request)
+    details = request.form
+    userName = details['fname']
+    userPassword = details['lname']
+    print(details)
+    query = "INSERT INTO users (user_name, user_password) VALUES ('%s', '%s')" %(userName, userPassword)
+    executeQueries(query, idsRunning=False)
+    flash('User successfully added')
+    redirect('register')
+    
   return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -155,6 +158,9 @@ def login():
         return render_template("SQLiaDetected.html", invalidQuery = query)
       if debug :
         print("DB response :\n%s" %(serverResponse or "No matching user in DB"))
+      if len(serverResponse) == 0 :
+        flash('Invalid Login', category='error')
+        return redirect('/login')
       return render_template('loginResponse.html', tupleResults = serverResponse, time=floor(totalTime*1000))
   return render_template('login.html')
 
@@ -174,6 +180,8 @@ def userProfile() :
 def verifyQuery(query) :
   global currentHash
   global templatesList
+
+  console.print("\n[bold red]Query :[/bold red]", query)
 
   if debug : 
     console.print('Comparing hashes...')
@@ -229,13 +237,12 @@ def executeQueries(query, idsRunning=True) :
   if idsRunning and not verifyQuery(query) :
     return False
 
-  results = []
   cnx = mysql.connector.connect(**config)
   cursor = cnx.cursor()
   if debug :
     print("\nStatement : "+query)
   for result in cursor.execute(query, multi=True) :
-    results.append(cursor.fetchall())
+      results = result.fetchall()
   cnx.commit()
   cursor.close()
   cnx.close()

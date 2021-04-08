@@ -1,14 +1,18 @@
 <html>
-  <body bgcolor="red">
-    <center>
-      <h1>Invalid SQL statement :</h1>
-      <p>{{invalidQuery}}</p>
-    </center>
-    <footer>
-      <center>
-        <a href="{{url_for('login')}}">Sign in again</a>
-        <a href="{{url_for('register')}}">Register</a>
-      </center>
-    </footer>
+  <head>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body class="w-full h-2/3 flex flex-col items-center mx-auto bg-red-100">
+
+    <div class="w-full p-9">
+      <div class="text-xl text-center">Invalid SQL statement :</div>
+      <div class="text-sm text-center">{{invalidQuery}}</div> 
+    </div>
+
+    <div class="w-full max-w-xs flex flex-row align-center justify-evenly">
+      <a href="{{url_for('login')}}" class="text-gray-400 italic hover:underline">Sign in again</a>
+      <a href="{{url_for('register')}}" class="text-gray-400 hover:underline italic hover:font-bold">Register</a>
+    </div>
   </body>
+
 </html>

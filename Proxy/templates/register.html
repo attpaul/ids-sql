@@ -1,19 +1,49 @@
 <html>
-  <body bgcolor="	#008b8b">
-    <form method="POST" action="">
-      <center>
-        <h1>Sign up :Enter your details</h1>
-        <br />
-        User name <input type="text" name="fname" /> <br />
-        Password <input type="text" name="lname" /> <br />
-        <input type="submit" />
-      </center>
-    </form>
-    <footer>
-      <center>
-        <a href="{{url_for('login')}}">Sign in</a>
-        <a href="{{url_for('register')}}">Register again</a>
-      </center>
-    </footer>
+  <head>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body class="w-full h-2/3 flex flex-col items-center mx-auto bg-blue-100">
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="w-2/3 bg-green-500 border rounded py-2 px-9 mt-9 mb-9 text-white text-center">
+            <ul>
+              {% for message in messages %}
+                <li>
+                  {{ message }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endwith %}
+  
+    <div class="w-full max-w-xs mx-auto my-auto">
+      <form action="" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="fname">
+            Username
+          </label>
+          <input type="text" name="fname" placeholder="Username" id="fname" class="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"/> <br />
+        </div>          
+        <div class="mb-6">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="lname">
+            Password
+          </label>
+          <input type="password" name="lname" placeholder="Password" id="lname" class="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"/> <br />
+        </div>
+        <div class="flex items-center justify-evenly">
+          <button type="submit" class="bg-blue-500 hover:bg-blue-700 rounded py-2 px-3 text-white font-bold shadow-inner" >
+            Register
+          </button>
+        </div>
+      </form>
+      <div class="flex flex-row align-center justify-evenly">
+        <a href="{{url_for('login')}}" class="text-gray-400 italic hover:underline">Sign in</a>
+        <a href="{{url_for('register')}}" class="text-gray-400 hover:underline italic hover:font-bold">Register again</a>
+      </div>
+    </div>
+
   </body>
+
 </html>
