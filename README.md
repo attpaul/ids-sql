@@ -4,7 +4,7 @@
 
 Projet de detection d'injections SQL
 
-Paul ATTAL, Romain BLANC, Alexandre DE BEAUDRAP
+Paul ATTAL, Romain BLANC, Alexandre de BEAUDRAP
 
 Realise sous l'encadrement de Pierre-Francois GIMENEZ
 
